@@ -7,6 +7,7 @@ private:
     std::string nombre_curso_;
     int cantidad_max_;
     std::string carrera_curso;
+    std::string nombre_profesor_curso_;
 };
 
 

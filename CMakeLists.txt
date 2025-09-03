@@ -9,4 +9,7 @@ add_executable(Taller1 main.cpp
         Alumno.cpp
         Curso.cpp
         Curso.h
+        NodoAlumno.h
+        ListaAlumnos.h
+        ListaAlumnos.cpp
 )
