@@ -12,4 +12,5 @@ add_executable(Taller1 main.cpp
         NodoAlumno.h
         ListaAlumnos.h
         ListaAlumnos.cpp
+        Utilidades.h
 )

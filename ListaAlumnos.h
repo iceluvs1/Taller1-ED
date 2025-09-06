@@ -4,11 +4,14 @@
 class ListaAlumnos {
 private:
     NodoAlumno* head;
-    int n;
+    int cantidad;
 
 public:
     ListaAlumnos();
     ~ListaAlumnos();
 
-    void agregarAlumno(const Alumno& alumno);
+    bool agregarAlumno(const Alumno& alumno);
+    NodoAlumno* buscarPorId(int id_alumno) const;
+    void buscarPorNombre(const std::string& nombre);
+    bool eliminarPorId(const int id_alumno);
 };
