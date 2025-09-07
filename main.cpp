@@ -3,6 +3,7 @@
 #include "Alumno.h"
 #include "ListaAlumnos.h"
 #include "NodoAlumno.h"
+#include "Utilidades.h"
 
 
 void menuManejoAlumnos(ListaAlumnos& lista);
@@ -77,19 +78,46 @@ void menuManejoAlumnos(ListaAlumnos& lista) {
         }
 
         if (opcionAlumno == 1) {
+            // limpia el "\n" que dejó opcionAlumno
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            std::string sId;
             int id;
             std::string nombre, apellido, carrera, fechaIngreso;
 
-            std::cout << "Ingrese ID: ";
-            std::cin >> id;
-            std::cout << "Ingrese Nombre: ";
-            std::cin >> nombre;
-            std::cout << "Ingrese Apellido: ";
-            std::cin >> apellido;
-            std::cout << "Ingrese Carrera: ";
-            std::cin >> carrera;
-            std::cout << "Ingrese Fecha de Ingreso (DD/MM/AAAA): ";
-            std::cin >> fechaIngreso;
+            while (true) {  // Ingrese ID con control de error
+                std::cout << "Ingrese ID: ";
+                std::getline(std::cin, sId);
+                if (Utilidades::esNumeroEnteroPositivo(sId)) {
+                    try { id = std::stoi(sId); } catch (...) { id = -1; }
+                    if (id >= 0) break;
+                }
+                std::cout << "ERROR. El ID debe contener solo dígitos.\n";
+            }
+            while (true) {  // Ingrese nombre con control de error
+                std::cout << "Ingrese Nombre: ";
+                std::getline(std::cin, nombre);
+                if (Utilidades::esSoloLetrasEspacios(nombre)) break;
+                std::cout << "ERROR. El nombre debe contener solo letras y espacios.\n";
+            }
+            while (true) {  // Ingrese apellido con control de error
+                std::cout << "Ingrese Apellido: ";
+                std::getline(std::cin, apellido);
+                if (Utilidades::esSoloLetrasEspacios(apellido)) break;
+                std::cout << "[Error] El apellido debe contener solo letras y espacios.\n";
+            }
+            while (true) {  // Ingrese carrera con control de error
+                std::cout << "Ingrese Carrera: ";
+                std::getline(std::cin, carrera);
+                if (Utilidades::esSoloLetrasEspacios(carrera)) break;
+                std::cout << "[Error] La carrera debe contener solo letras y espacios.\n";
+            }
+            while (true) {  // Ingrese fecha con control de error
+                std::cout << "Ingrese Fecha de Ingreso (DD/MM/AAAA): ";
+                std::cin >> fechaIngreso;
+                if (Utilidades::fechaFormatoValido(fechaIngreso)) break;
+                std::cout << "ERROR. La fecha debe estar en formato DD/MM/AAAA.\n";
+            }
 
             Alumno nuevoAlumno(id, nombre, apellido, carrera, fechaIngreso);
             lista.agregarAlumno(nuevoAlumno);
