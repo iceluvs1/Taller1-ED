@@ -155,6 +155,116 @@ void menuManejoAlumnos(ListaAlumnos& lista) {
 }
 
 
+// FUNCIÓN PARA MANEJO DE CURSOS
+void menuManejoCursos(ListaCursos& cursos, ListaInscripciones& inscripciones) {
+    int opcionCurso;
+    do {
+        std::cout << "\n=== Manejo de Cursos ===\n";
+        std::cout << "1. Crear curso\n";
+        std::cout << "2. Buscar curso por ID\n";
+        std::cout << "3. Buscar curso por nombre\n";
+        std::cout << "4. Eliminar curso por ID\n";
+        std::cout << "5. Mostrar todos\n";
+        std::cout << "0. Volver\n";
+        std::cout << "Seleccione una opcion: ";
+        std::cin >> opcionCurso;
+
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Entrada invalida. Intente nuevamente.\n";
+            opcionCurso = -1;
+            continue;
+        }
+
+        if (opcionCurso == 1) {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            std::string sId, nombre, sCantidadMax, carrera, profesor;
+            int id = -1, cupo = -1;
+
+            while (true) {
+                std::cout << "ID: ";
+                std::getline(std::cin, sId);
+                if (Utilidades::esNumeroEnteroPositivo(sId)) {
+                    try { id = std::stoi(sId); } catch (...) { id = -1; }
+                    if (id >= 0) {
+                        if (cursos.existeId(id)) {
+                            std::cout << "ERROR. Ya existe un curso con ese ID.\n";
+                        } else break;
+                    }
+                } else {
+                    std::cout << "ERROR. Solo digitos.\n";
+                }
+            }
+
+            while (true) {
+                std::cout << "Nombre del curso: ";
+                std::getline(std::cin, nombre);
+                if (Utilidades::esSoloLetrasEspacios(nombre) && !nombre.empty()) break;
+                std::cout << "ERROR. Solo letras y espacios.\n";
+            }
+
+            while (true) {
+                std::cout << "Capacidad maxima: ";
+                std::getline(std::cin, sCupo);
+                if (Utilidades::esNumeroEnteroPositivo(sCupo)) {
+                    try { cupo = std::stoi(sCupo); } catch (...) { cupo = -1; }
+                    if (cupo >= 0) break;
+                }
+                std::cout << "ERROR. Ingrese entero positivo.\n";
+            }
+
+            while (true) {
+                std::cout << "Carrera: ";
+                std::getline(std::cin, carrera);
+                if (Utilidades::esSoloLetrasEspacios(carrera) && !carrera.empty()) break;
+                std::cout << "ERROR. Solo letras y espacios.\n";
+            }
+
+            while (true) {
+                std::cout << "Profesor: ";
+                std::getline(std::cin, profesor);
+                if (Utilidades::esSoloLetrasEspacios(profesor) && !profesor.empty()) break;
+                std::cout << "ERROR. Solo letras y espacios.\n";
+            }
+
+            Curso nuevo(id, nombre, cupo, carrera, profesor);
+            cursos.agregarCurso(nuevo);
+            std::cout << "Curso creado.\n";
+        }
+        else if (opcionCurso == 2) {
+            int id;
+            std::cout << "Ingrese ID del curso: ";
+            std::cin >> id;
+            auto* nodo = cursos.buscarPorCodigo(id);
+            if (nodo) ListaCursos::mostrarCurso(nodo->dato);
+            else std::cout << "[No existe un curso con ese ID]\n";
+        }
+        else if (opcionCurso == 3) {
+            std::string nombre;
+            std::cout << "Ingrese nombre a buscar: ";
+            std::cin >> nombre;
+            int mostrados = cursos.listarPorNombre(nombre);
+            if (mostrados == 0) std::cout << "[Sin coincidencias por nombre]\n";
+        }
+        else if (opcionCurso == 4) {
+            int id;
+            std::cout << "Ingrese ID de curso a eliminar: ";
+            std::cin >> id;
+            if (cursos.eliminarPorId(id, inscripciones))
+                std::cout << "Curso eliminado.\n";
+            else
+                std::cout << "[No existe un curso con ese ID]\n";
+        }
+        else if (opcionCurso == 5) {
+            cursos.listarTodos();
+        }
+
+    } while (opcionCurso != 0);
+}
+
+
 
 
 
