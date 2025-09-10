@@ -9,10 +9,15 @@
 class ListaCursos {
 private:
     NodoCurso* head;
+    int cantidad;
 
 public:
     ListaCursos();
     ~ListaCursos();
 
-    void agregar();
+    bool agregarCurso(const Curso& curso);
+    NodoCurso* buscarPorId(int id_curso) const;
+    void buscarPorNombre(const std::string& nombre) const;
+    bool eliminarPorId(int id_curso);
+    int totalCursos() const;
 };
