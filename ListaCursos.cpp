@@ -1,4 +1,5 @@
 #include "ListaCursos.h"
+#include "ListaInscripciones.h"
 #include "Utilidades.h"
 #include <iostream>
 
@@ -46,7 +47,55 @@ bool ListaCursos::agregarCurso(const Curso& curso) {
     return true;
 }
 
+// Función para buscar curso por nombre
+void ListaCursos::buscarPorNombre(const std::string& nombre) const {
+    bool huboCoincidencias = false;
+    int totalCoincidencias = 0;
 
+    std::string nombreBuscadoMin = Utilidades::ignorarMayusculas(nombre);
 
+    NodoCurso* nodoActual = head;   // arrancamos desde la cabeza de la lista
+    while (nodoActual) {            // mientras no lleguemos al final (nullptr)
+        std::string nombreNodoMin =
+            Utilidades::ignorarMayusculas(nodoActual->dato.nombre_curso());
 
+        if (nombreNodoMin == nombreBuscadoMin) {
+            if (!huboCoincidencias) {
+                std::cout << "Coincidencias para nombre de curso \"" << nombre << "\":\n";
+                huboCoincidencias = true;
+            }
+            nodoActual->dato.mostrar();   // muestra la info completa del curso
+            ++totalCoincidencias;
+        }
+        nodoActual = nodoActual->sig;    // avanzar al siguiente nodo
+    }
+
+    if (!huboCoincidencias) {
+        std::cout << "[No se encontraron cursos con ese nombre]\n";
+    } else {
+        std::cout << "(Total coincidencias: " << totalCoincidencias << ")\n";
+    }
+}
+
+// Función para eliminar curso por ID
+bool ListaCursos::eliminarPorId(int id_curso, ListaInscripciones& inscripciones) {
+    NodoCurso* nodoActual = head;
+    NodoCurso* nodoAnterior = nullptr;
+
+    while (nodoActual) {
+        if (nodoActual->dato.id_curso() == id_curso) {
+            if (nodoAnterior) nodoAnterior->sig = nodoActual->sig;
+            else head = nodoActual->sig;
+
+            inscripciones.eliminarPorCurso(id_curso);
+
+            delete nodoActual;
+            --cantidad;
+            return true;
+        }
+        nodoAnterior = nodoActual;
+        nodoActual = nodoActual->sig;
+    }
+    return false;
+}
 

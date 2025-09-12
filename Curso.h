@@ -19,6 +19,8 @@ public:
     int cantidad_max() const;
     const std::string& carrera_curso() const;
     const std::string& nombre_profesor_curso() const;
+
+    void mostrar() const;
 };
 
 
