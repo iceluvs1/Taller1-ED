@@ -94,3 +94,25 @@ bool ListaAlumnos::eliminarPorId(int id_alumno) {
     }
     return false;
 }
+
+// Función para obtener alumnos de una carrera
+void ListaAlumnos::listarPorCarrera(const std::string& carrera) const {
+    std::string carreraMin = Utilidades::ignorarMayusculas(carrera);
+    bool hubo = false;
+    int total = 0;
+
+    NodoAlumno* nodo = head;
+    while (nodo) {
+        if (Utilidades::ignorarMayusculas(nodo->dato.carrera()) == carreraMin) {
+            if (!hubo) {
+                std::cout << "Alumnos de la carrera \"" << carrera << "\":\n";
+                hubo = true;
+            }
+            nodo->dato.mostrar();
+            ++total;
+        }
+        nodo = nodo->sig;
+    }
+    if (!hubo) std::cout << "[No se encontraron alumnos de esa carrera]\n";
+    else       std::cout << "(Total: " << total << ")\n";
+}

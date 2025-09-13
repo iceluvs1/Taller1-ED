@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-ListaCursos::ListaCursos() : head(nullptr) {}
+ListaCursos::ListaCursos() : head(nullptr), cantidad(0) {}
 
 ListaCursos::~ListaCursos() {
     NodoCurso* nodoActual = head;

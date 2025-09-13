@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <iomanip>
 #include "Alumno.h"
 #include "ListaAlumnos.h"
 #include "NodoAlumno.h"
@@ -11,6 +12,9 @@
 void menuManejoAlumnos(ListaAlumnos& lista);
 void menuManejoCursos(ListaCursos& cursos, ListaInscripciones& inscripciones);
 void menuManejoInscripciones(ListaInscripciones& inscripciones, ListaAlumnos& alumnos, ListaCursos& cursos);
+void menuManejoNotas(ListaInscripciones& inscripciones);
+void menuConsultasReportes(ListaAlumnos& alumnos, ListaCursos& cursos, ListaInscripciones& inscripciones);
+
 
 int main() {
     ListaAlumnos alumnos;
@@ -19,7 +23,7 @@ int main() {
     int opcion = -1;
 
     do {
-        std::cout << "\n--- MENU PRINCIPAL ---\n";
+        std::cout << "\n=== MENU PRINCIPAL ===\n";
         std::cout << "1. Manejo de Alumnos\n";
         std::cout << "2. Manejo de Cursos\n";
         std::cout << "3. Manejo de Inscripciones\n";
@@ -31,7 +35,7 @@ int main() {
         if (!(std::cin >> opcion)) {
             std::cin.clear(); // limpia el error
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Entrada inválida, intente de nuevo.\n";
+            std::cout << "Entrada invalida, intente de nuevo.\n";
             opcion = -1; // valor inválido para que no salga del menú
             continue;
         }
@@ -49,11 +53,19 @@ int main() {
                 menuManejoInscripciones(inscripciones, alumnos, cursos);
                 break;
             }
+            case 4: {
+                menuManejoNotas(inscripciones);
+                break;
+            }
+            case 5: {
+                menuConsultasReportes(alumnos, cursos, inscripciones);
+                break;
+            }
             case 0:
                 std::cout << "MENU CERRADO CON EXITO\n";
                 break;
             default:
-                std::cout << "Opción inválida, intente de nuevo.\n";
+                std::cout << "Opción invalida, intente de nuevo.\n";
                 break;
         }
 
@@ -68,20 +80,20 @@ int main() {
 void menuManejoAlumnos(ListaAlumnos& lista) {
     int opcionAlumno;
     do {
-        std::cout << "\n=== Manejo de Alumnos ===\n";
+        std::cout << "\n>>> Manejo de Alumnos <<<\n";
         std::cout << "1. Crear alumno\n";
         std::cout << "2. Buscar alumno por ID\n";
         std::cout << "3. Buscar alumno por nombre\n";
         std::cout << "4. Eliminar alumno por ID\n";
         std::cout << "0. Volver al menú principal\n";
-        std::cout << "Seleccione una opción: ";
+        std::cout << "Seleccione una opcion: ";
         std::cin >> opcionAlumno;
 
         // Manejar errores de entrada del usuario
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Entrada inválida, intente de nuevo.\n";
+            std::cout << "Entrada invalida, intente de nuevo.\n";
             opcionAlumno = -1; // fuerza seguir en el menú
             continue;
         }
@@ -101,7 +113,7 @@ void menuManejoAlumnos(ListaAlumnos& lista) {
                     try { id = std::stoi(sId); } catch (...) { id = -1; }
                     if (id >= 0) break;
                 }
-                std::cout << "ERROR. El ID debe contener solo dígitos.\n";
+                std::cout << "ERROR. El ID debe contener solo digitos.\n";
             }
             while (true) {  // Ingrese nombre con control de error
                 std::cout << "Ingrese Nombre: ";
@@ -168,7 +180,7 @@ void menuManejoAlumnos(ListaAlumnos& lista) {
 void menuManejoCursos(ListaCursos& cursos, ListaInscripciones& inscripciones) {
     int opcionCurso;
     do {
-        std::cout << "\n=== Manejo de Cursos ===\n";
+        std::cout << "\n>>> Manejo de Cursos <<<\n";
         std::cout << "1. Crear curso\n";
         std::cout << "2. Buscar curso por ID\n";
         std::cout << "3. Buscar curso por nombre\n";
@@ -274,10 +286,11 @@ void menuManejoCursos(ListaCursos& cursos, ListaInscripciones& inscripciones) {
 }
 
 
+// FUNCIÓN PARA MANEJO DE INSCRIPCIONES
 void menuManejoInscripciones(ListaInscripciones& inscripciones, ListaAlumnos& alumnos, ListaCursos& cursos) {
     int opcionIns = -1;
     do {
-        std::cout << "\n=== Manejo de Inscripciones ===\n";
+        std::cout << "\n>>> Manejo de Inscripciones <<<\n";
         std::cout << "1. Inscribir alumno en curso\n";
         std::cout << "2. Eliminar alumno de curso\n";
         std::cout << "0. Volver\n";
@@ -293,30 +306,209 @@ void menuManejoInscripciones(ListaInscripciones& inscripciones, ListaAlumnos& al
 
         if (opcionIns == 1) {
             int id_alumno, id_curso;
-            std::cout << "ID Alumno: "; std::cin >> id_alumno;
-            std::cout << "ID Curso : "; std::cin >> id_curso;
-            if (!std::cin.fail()) inscripciones.inscribir(id_alumno, id_curso, alumnos, cursos);
-            else {
-                std::cin.clear(); std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Datos invalidos.\n";
+            while (true) {
+                std::cout << "ID Alumno: ";
+                if (std::cin >> id_alumno) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un número entero.\n";
             }
+            while (true) {
+                std::cout << "ID Curso : ";
+                if (std::cin >> id_curso) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un número entero.\n";
+            }
+
+            inscripciones.inscribir(id_alumno, id_curso, alumnos, cursos);
         }
+
         else if (opcionIns == 2) {
             int id_alumno, id_curso;
-            std::cout << "ID Alumno: "; std::cin >> id_alumno;
-            std::cout << "ID Curso : "; std::cin >> id_curso;
-            if (!std::cin.fail()) {
-                if (inscripciones.desinscribir(id_alumno, id_curso))
-                    std::cout << "Inscripcion eliminada.\n";
-                else
-                    std::cout << "[No existe esa inscripcion]\n";
-            } else {
-                std::cin.clear(); std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Datos invalidos.\n";
+            while (true) {
+                std::cout << "ID Alumno: ";
+                if (std::cin >> id_alumno) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un número entero.\n";
             }
+            while (true) {
+                std::cout << "ID Curso : ";
+                if (std::cin >> id_curso) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un número entero.\n";
+            }
+
+            if (inscripciones.desinscribir(id_alumno, id_curso))
+                std::cout << "Inscripción eliminada.\n";
+            else
+                std::cout << "[No existe esa inscripción]\n";
         }
 
     } while (opcionIns != 0);
 }
 
 
+// FUNCIÓN PARA MANEJO DE NOTAS
+void menuManejoNotas(ListaInscripciones& inscripciones) {
+    int opcionNotas = -1;
+    do {
+        std::cout << "\n>>> Manejo de Notas <<<\n";
+        std::cout << "1. Agregar nota (1.0 a 7.0)\n";
+        std::cout << "2. Ver notas de un alumno en un curso\n";
+        std::cout << "0. Volver\n";
+        std::cout << "Seleccione una opcion: ";
+
+        if (!(std::cin >> opcionNotas)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Entrada invalida.\n";
+            opcionNotas = -1;
+            continue;
+        }
+
+        if (opcionNotas == 1) {
+            int id_alumno, id_curso;
+            float nota;
+            while (true) {
+                std::cout << "ID Alumno: ";
+                if (std::cin >> id_alumno) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un numero entero.\n";
+            }
+            while (true) {
+                std::cout << "ID Curso : ";
+                if (std::cin >> id_curso) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un numero entero.\n";
+            }
+            while (true) {
+                std::cout << "Nota (1.0 a 7.0): ";
+                if (std::cin >> nota && nota >= 1.0f && nota <= 7.0f) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. La nota debe estar entre 1.0 y 7.0.\n";
+            }
+
+            inscripciones.agregarNota(id_alumno, id_curso, nota);
+        }
+        else if (opcionNotas == 2) {
+            int id_alumno, id_curso;
+            while (true) {
+                std::cout << "ID Alumno: ";
+                if (std::cin >> id_alumno) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un numero entero.\n";
+            }
+            while (true) {
+                std::cout << "ID Curso : ";
+                if (std::cin >> id_curso) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un numero entero.\n";
+            }
+
+            inscripciones.verNotas(id_alumno, id_curso);
+        }
+
+    } while (opcionNotas != 0);
+}
+
+
+
+//Complementos
+static std::string nombreCompletoAlumno(const ListaAlumnos& alumnos, int id) {
+    if (NodoAlumno* nodo = alumnos.buscarPorId(id)) {
+        return nodo->dato.nombre() + " " + nodo->dato.apellido();
+    }
+    return "Desconocido";
+}
+
+static std::string nombreCurso(const ListaCursos& cursos, int id) {
+    if (NodoCurso* nodo = cursos.buscarPorId(id)) {
+        return nodo->dato.nombre_curso();
+    }
+    return "Desconocido";
+}
+// FUNCIÓN PARA CONSULTAS Y REPORTES
+void menuConsultasReportes(ListaAlumnos& alumnos, ListaCursos& cursos, ListaInscripciones& inscripciones) {
+    int op = -1;
+    do {
+        std::cout << "\n>>> Consultas y Reportes <<<\n";
+        std::cout << "1. Obtener todos los alumnos de una carrera\n";
+        std::cout << "2. Obtener todos los cursos en los que un alumno esta inscrito\n";
+        std::cout << "3. Calcular el promedio de notas de un alumno en un curso\n";
+        std::cout << "4. Calcular el promedio general de un alumno\n";
+        std::cout << "0. Volver\n";
+        std::cout << "Seleccione una opcion: ";
+
+        if (!(std::cin >> op)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Entrada invalida.\n";
+            op = -1;
+            continue;
+        }
+
+        if (op == 1) {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::string carrera;
+            std::cout << "Carrera: ";
+            std::getline(std::cin, carrera);
+            alumnos.listarPorCarrera(carrera);
+        }
+        else if (op == 2) {
+            int id_alumno;
+            while (true) {
+                std::cout << "ID Alumno: ";
+                if (std::cin >> id_alumno) break;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un numero entero.\n";
+            }
+            inscripciones.listarCursosDeAlumno(id_alumno, cursos);
+        }
+        else if (op == 3) {
+            int id_alumno, id_curso;
+            while (true) {
+                std::cout << "ID Alumno: ";
+                if (std::cin >> id_alumno) break;
+                std::cin.clear(); std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un numero entero.\n";
+            }
+            while (true) {
+                std::cout << "ID Curso : ";
+                if (std::cin >> id_curso) break;
+                std::cin.clear(); std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un numero entero.\n";
+            }
+            float promedioCurso = 0.0f;
+            if (inscripciones.promedioAlumnoEnCurso(id_alumno, id_curso, promedioCurso)) {
+                std::cout << "Promedio de " << nombreCompletoAlumno(alumnos, id_alumno) << " en " << nombreCurso(cursos, id_curso) << " = " << std::fixed << std::setprecision(2) << promedioCurso << "\n";
+            } else {
+                std::cout << "[No hay notas registradas o no existe la inscripcion]\n";
+            }
+        }
+        else if (op == 4) {
+            int id_alumno;
+            while (true) {
+                std::cout << "ID Alumno: ";
+                if (std::cin >> id_alumno) break;
+                std::cin.clear(); std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "ERROR. Debe ingresar un numero entero.\n";
+            }
+            float promedioGeneral = 0.0f;
+            if (inscripciones.promedioGeneralAlumno(id_alumno, promedioGeneral)) {
+                std::cout << "Promedio General de " << nombreCompletoAlumno(alumnos, id_alumno) << " = " << std::fixed << std::setprecision(2) << promedioGeneral << "\n";
+            } else {
+                std::cout << "[El alumno no tiene cursos con notas registradas]\n";
+            }
+        }
+
+    } while (op != 0);
+}

@@ -14,4 +14,5 @@ public:
     NodoAlumno* buscarPorId(int id_alumno) const;
     void buscarPorNombre(const std::string& nombre);
     bool eliminarPorId(const int id_alumno);
+    void listarPorCarrera(const std::string& carrera) const;
 };
