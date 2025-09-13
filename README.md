@@ -4,7 +4,7 @@ Proyecto en C++ que implementa la gestión de **Alumnos, Cursos, Inscripciones y
 
 ## 🚀 Compilación y ejecución rápida
 
-En la raíz del proyecto, ejecuta:
+En la consola, ejecuta:
 
 ```bash
 g++ -std=c++20 -Wall -Wextra -pedantic \
