@@ -15,3 +15,6 @@ g++ -std=c++20 -Wall -Wextra -pedantic \
   -o Taller1
 
 ./Taller1
+```
+## 📌 Autor
+Desarrollado por **Martin Trujillo Guzmán**
