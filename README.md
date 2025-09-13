@@ -1,6 +1,7 @@
 # Taller1-ED
 
 Proyecto en C++ que implementa la gestión de **Alumnos, Cursos, Inscripciones y Notas**.
+Haciendo uso de **Listas Enlazadas**
 
 ## 🚀 Compilación y ejecución rápida
 
