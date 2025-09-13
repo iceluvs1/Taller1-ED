@@ -65,7 +65,7 @@ int main() {
                 std::cout << "MENU CERRADO CON EXITO\n";
                 break;
             default:
-                std::cout << "Opción invalida, intente de nuevo.\n";
+                std::cout << "Opcion invalida, intente de nuevo.\n";
                 break;
         }
 
@@ -85,7 +85,7 @@ void menuManejoAlumnos(ListaAlumnos& lista) {
         std::cout << "2. Buscar alumno por ID\n";
         std::cout << "3. Buscar alumno por nombre\n";
         std::cout << "4. Eliminar alumno por ID\n";
-        std::cout << "0. Volver al menú principal\n";
+        std::cout << "0. Volver al menu principal\n";
         std::cout << "Seleccione una opcion: ";
         std::cin >> opcionAlumno;
 
