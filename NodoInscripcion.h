@@ -13,12 +13,11 @@ class NodoInscripcion {
 public:
     int id_alumno;
     int id_curso;
+
+    int notasCount;
+    NodoNota* notasHead;
     NodoInscripcion* sig;
 
-    NodoNota* notasHead;
-    int notasCount;
-
     NodoInscripcion(int idAlumno, int idCurso)
-        : id_alumno(idAlumno), id_curso(idCurso), notasHead(nullptr),
-        notasCount(0), sig(nullptr) {}
+        : id_alumno(idAlumno), id_curso(idCurso), notasCount(0), notasHead(nullptr), sig(nullptr) {}
 };
